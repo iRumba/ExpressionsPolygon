@@ -26,7 +26,8 @@ namespace ExpressionsPolygon.Core
         /// <summary>
         ///     Логическая операция ИЛИ.
         /// </summary>
-        /// <typeparam name="TEntity"> Тип параметра выражений. </typeparam>
+        /// <typeparam name="TEntity1"> Тип параметра выражений. </typeparam>
+        /// <typeparam name="TEntity2"> Тип параметра выражений. </typeparam>
         /// <param name="leftPredicate"> Левый предикат. </param>
         /// <param name="rightPredicate"> Правый предикат. </param>
         /// <returns> Итоговый предикат. </returns>

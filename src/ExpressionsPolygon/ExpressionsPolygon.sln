@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionsPolygon.Core", "ExpressionsPolygon.Core\ExpressionsPolygon.Core.csproj", "{6D9BBA1E-E4BB-41B4-A562-772B13BD1838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionsPolygon.Core", "ExpressionsPolygon.Core\ExpressionsPolygon.Core.csproj", "{6D9BBA1E-E4BB-41B4-A562-772B13BD1838}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionPolygon.Core.Tests", "ExpressionPolygon.Core.Tests\ExpressionPolygon.Core.Tests.csproj", "{254810F4-1A15-4A66-8A6F-A689331C6CEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpressionPolygon.Core.Tests", "ExpressionPolygon.Core.Tests\ExpressionPolygon.Core.Tests.csproj", "{254810F4-1A15-4A66-8A6F-A689331C6CEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionsPolygon.ComparisonWithReflections", "ExpressionsPolygon.ComparisonWithReflections\ExpressionsPolygon.ComparisonWithReflections.csproj", "{8A8FDDA7-693D-4B9F-9CD7-7F8B4BC81BF0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ComparisonWithReflections", "ComparisonWithReflections", "{1D53897D-EC1C-4A55-9EF1-E7E50339A8C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C2DD8478-82D9-4981-AC40-AC58D0101C39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionPolygon.ComparisonWithReflections.Tests", "ExpressionPolygon.ComparisonWithReflections.Tests\ExpressionPolygon.ComparisonWithReflections.Tests.csproj", "{695A772F-3209-4AD6-A20F-157368FA875A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +29,23 @@ Global
 		{254810F4-1A15-4A66-8A6F-A689331C6CEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{254810F4-1A15-4A66-8A6F-A689331C6CEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{254810F4-1A15-4A66-8A6F-A689331C6CEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A8FDDA7-693D-4B9F-9CD7-7F8B4BC81BF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A8FDDA7-693D-4B9F-9CD7-7F8B4BC81BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A8FDDA7-693D-4B9F-9CD7-7F8B4BC81BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A8FDDA7-693D-4B9F-9CD7-7F8B4BC81BF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{695A772F-3209-4AD6-A20F-157368FA875A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{695A772F-3209-4AD6-A20F-157368FA875A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{695A772F-3209-4AD6-A20F-157368FA875A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{695A772F-3209-4AD6-A20F-157368FA875A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6D9BBA1E-E4BB-41B4-A562-772B13BD1838} = {C2DD8478-82D9-4981-AC40-AC58D0101C39}
+		{254810F4-1A15-4A66-8A6F-A689331C6CEF} = {C2DD8478-82D9-4981-AC40-AC58D0101C39}
+		{8A8FDDA7-693D-4B9F-9CD7-7F8B4BC81BF0} = {1D53897D-EC1C-4A55-9EF1-E7E50339A8C3}
+		{695A772F-3209-4AD6-A20F-157368FA875A} = {1D53897D-EC1C-4A55-9EF1-E7E50339A8C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E37F53E-1F32-4A12-9ACB-78F79A41F7D3}

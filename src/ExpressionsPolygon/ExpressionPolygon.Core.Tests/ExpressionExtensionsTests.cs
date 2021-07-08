@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using ExpressionsPolygon.Core;
 using FluentAssertions;
@@ -127,12 +129,52 @@ namespace ExpressionPolygon.Core.Tests
 
         [TestCaseSource(nameof(_addTailCases))]
         [Test]
-        public void AddTail(Expression<Func<TestClass, TestClassNested>> lambda1,
+        public void AddTail_should_join_successful(Expression<Func<TestClass, TestClassNested>> lambda1,
             Expression<Func<TestClassNested, int>> lambda2, string expected)
         {
             var resPredicate = lambda1.AddTail(lambda2);
 
             resPredicate.ToString().Should().Be(expected);
+        }
+
+        [Test]
+        public void Any_method_should_be_join()
+        {
+            Expression<Func<TestClassNested, bool>> predicate = x => x.IntProp == 5;
+
+            Expression<Func<TestClass, IEnumerable<TestClassNested>>> collectionSelector = k => k.NestedCollection;
+
+            Expression<Func<TestClass, bool>> expected = k => k.NestedCollection.Any(x => x.IntProp == 5);
+
+            var resultPredicate = collectionSelector.Any(predicate);
+
+            resultPredicate.ToString().Should().Be(expected.ToString());
+        }
+
+        [Test]
+        public void All_method_should_be_join()
+        {
+            Expression<Func<TestClassNested, bool>> predicate = x => x.IntProp == 5;
+
+            Expression<Func<TestClass, IEnumerable<TestClassNested>>> collectionSelector = k => k.NestedCollection;
+
+            Expression<Func<TestClass, bool>> expected = k => k.NestedCollection.All(x => x.IntProp == 5);
+
+            var resultPredicate = collectionSelector.All(predicate);
+
+            resultPredicate.ToString().Should().Be(expected.ToString());
+        }
+
+        [Test]
+        public void Contains_method_should_be_join()
+        {
+            Expression<Func<TestClass, IEnumerable<int>>> collectionSelector = k => k.IntCollection;
+
+            Expression<Func<TestClass, bool>> expected = k => k.IntCollection.Contains(5);
+
+            var resultPredicate = collectionSelector.Contains(5);
+
+            resultPredicate.ToString().Should().Be(expected.ToString());
         }
 
         public static bool MethodFromTestClassTrue(TestClass _) => true;
@@ -150,6 +192,16 @@ namespace ExpressionPolygon.Core.Tests
             public bool PropFalse2 => false;
 
             public TestClassNested Nested { get; } = new();
+
+            public List<int> IntCollection { get; } = new List<int>
+            {
+                5
+            };
+
+            public List<TestClassNested> NestedCollection { get; } = new List<TestClassNested>
+            {
+                new()
+            };
 
             public bool MethodTrue1() => true;
         }

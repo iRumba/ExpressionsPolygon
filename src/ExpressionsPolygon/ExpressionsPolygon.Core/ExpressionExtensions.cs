@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace ExpressionsPolygon.Core
 {
@@ -9,6 +11,18 @@ namespace ExpressionsPolygon.Core
     /// </summary>
     public static class ExpressionExtensions
     {
+        private static MethodInfo _anyMethod =
+            typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Single(x => x.Name == nameof(Enumerable.Any) && x.GetParameters().Length == 2);
+
+        private static MethodInfo _allMethod =
+            typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Single(x => x.Name == nameof(Enumerable.All) && x.GetParameters().Length == 2);
+
+        private static MethodInfo _containsMethod =
+            typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Single(x => x.Name == nameof(Enumerable.Contains) && x.GetParameters().Length == 2);
+
         /// <summary>
         ///     Логическая операция ИЛИ.
         /// </summary>
@@ -50,6 +64,73 @@ namespace ExpressionsPolygon.Core
             Expression<Func<TEntity, bool>> rightPredicate)
         {
             return (Expression<Func<TEntity, bool>>) leftPredicate.And((LambdaExpression) rightPredicate);
+        }
+
+        /// <summary>
+        ///     Применение метода Any к выражению коллекции.
+        /// </summary>
+        /// <typeparam name="TEntity"> Тип сущности источника. </typeparam>
+        /// <typeparam name="TProperty"> Тип элемента коллекции. </typeparam>
+        /// <param name="collectionSelector"> Селектор коллекции от сущности. </param>
+        /// <param name="propertyPredicate"> Предикат к элементу коллекции. </param>
+        /// <returns> Итоговое выражение. </returns>
+        public static Expression<Func<TEntity, bool>> Any<TEntity, TProperty>(
+            this Expression<Func<TEntity, IEnumerable<TProperty>>> collectionSelector,
+            Expression<Func<TProperty, bool>> propertyPredicate)
+        {
+            return collectionSelector.MakeCollectionPredicateMethodCall(
+                _anyMethod.MakeGenericMethod(typeof(TProperty)), propertyPredicate);
+        }
+
+        /// <summary>
+        ///     Применение метода All к выражению коллекции.
+        /// </summary>
+        /// <typeparam name="TEntity"> Тип сущности источника. </typeparam>
+        /// <typeparam name="TProperty"> Тип элемента коллекции. </typeparam>
+        /// <param name="collectionSelector"> Селектор коллекции от сущности. </param>
+        /// <param name="propertyPredicate"> Предикат к элементу коллекции. </param>
+        /// <returns> Итоговое выражение. </returns>
+        public static Expression<Func<TEntity, bool>> All<TEntity, TProperty>(
+            this Expression<Func<TEntity, IEnumerable<TProperty>>> collectionSelector,
+            Expression<Func<TProperty, bool>> propertyPredicate)
+        {
+            return collectionSelector.MakeCollectionPredicateMethodCall(
+                _allMethod.MakeGenericMethod(typeof(TProperty)), propertyPredicate);
+        }
+
+        /// <summary>
+        ///     Применение метода Contains к выражению коллекции.
+        /// </summary>
+        /// <typeparam name="TEntity"> Тип сущности источника. </typeparam>
+        /// <typeparam name="TProperty"> Тип элемента коллекции. </typeparam>
+        /// <param name="collectionSelector"> Селектор коллекции от сущности. </param>
+        /// <param name="value"> Значение, проверяемое на наличие. </param>
+        /// <returns> Итоговое выражение. </returns>
+        public static Expression<Func<TEntity, bool>> Contains<TEntity, TProperty>(
+            this Expression<Func<TEntity, IEnumerable<TProperty>>> collectionSelector,
+            TProperty value)
+        {
+            var constantExpression = Expression.Constant(value);
+            return collectionSelector.MakeCollectionPredicateMethodCall(
+                _containsMethod.MakeGenericMethod(typeof(TProperty)), constantExpression);
+        }
+
+        /// <summary>
+        ///     Применить к коллекции метод для предиката коллекции.
+        /// </summary>
+        /// <typeparam name="TEntity"> Тип сущности источника. </typeparam>
+        /// <typeparam name="TProperty"> Тип элемента коллекции. </typeparam>
+        /// <param name="collectionSelector"> Селектор коллекции от сущности. </param>
+        /// <param name="arguments"> Аргументы кроме аргемента коллекции. </param>
+        /// <param name="collectionPredicateMethod"></param>
+        /// <returns></returns>
+        private static Expression<Func<TEntity, bool>> MakeCollectionPredicateMethodCall<TEntity, TProperty>(
+            this Expression<Func<TEntity, IEnumerable<TProperty>>> collectionSelector,
+            MethodInfo collectionPredicateMethod, params Expression[] arguments)
+        {
+            var call = Expression.Call(null, collectionPredicateMethod, new []{collectionSelector.Body}.Concat(arguments));
+
+            return Expression.Lambda<Func<TEntity, bool>>(call, collectionSelector.Parameters);
         }
 
         /// <summary>
